@@ -81,7 +81,7 @@ source_files_in_directory() {
         for file in "$directory"/* "$directory"/.[!.]*; do
             if [ -f "$file" ]; then
                 source "$file"
-                echo "Sourced: $file"
+                #echo "Sourced: $file" -- for testing purposes
             fi
         done
     else
