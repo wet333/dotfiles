@@ -73,7 +73,7 @@ if ! shopt -oq posix; then
 fi
 
 
-# DOTFILES_START ----------------------------------------------------------------------------------------------------------------------------------
+# DOTFILES_CONFIGURATION_START ----------------------------------------------------------------------------------------------------------------------------------
 source_files_in_directory() {
     local directory="$1"
 
@@ -89,18 +89,18 @@ source_files_in_directory() {
     fi
 }
 
-# My personal terminal configs
+# Load terminal configurations
 bash_config_dir=~/dotfiles/bash
 source_files_in_directory "${bash_config_dir}"
 
-# My bash functions
+# Load all the functions to the terminal
 bash_functions_dir=~/dotfiles/functions
 source_files_in_directory "${bash_functions_dir}"
 
-set_prompt # Loads the prompt config 
+# Loads the prompt config 
+set_prompt
 
-# DOTFILES_END ------------------------------------------------------------------------------------------------------------------------------------
-
+# DOTFILES_CONFIGURATION_END ------------------------------------------------------------------------------------------------------------------------------------
 
 export NVM_DIR="$HOME/.nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm

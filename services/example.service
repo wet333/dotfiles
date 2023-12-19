@@ -1,0 +1,9 @@
+[Unit]
+Description=My Custom Service
+
+[Service]
+ExecStart=/usr/bin/bash /home/wet/dotfiles/scripts/test-service.sh
+Restart=always
+
+[Install]
+WantedBy=multi-user.target

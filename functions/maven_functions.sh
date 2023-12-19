@@ -1,4 +1,4 @@
-start_empty_java_project() {
+create_empty_java_project() {
     
     # Check if two arguments (group ID and project name) are provided
     if [ $# -ne 2 ]; then
