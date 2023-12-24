@@ -16,7 +16,7 @@ yt_on() {
     
     # Validate input
     if [[ -z "$enable_time" || -z "$reason" ]]; then
-        echo "Usage --> enable_temporary_youtube <duration_in_minutes> <reason>"
+        echo "Usage --> yt_on <duration_in_minutes> <reason>"
         return 1
     fi
 
