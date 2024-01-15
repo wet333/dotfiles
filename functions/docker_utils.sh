@@ -1,10 +1,13 @@
 start_pg_db() {
+    
+    # Get current user home path
+    home_path=$(readlink -f ~)
 
     # Test Database Configuration
     local db_name="test_database"
     local db_user="test_user"
     local db_password="password"
-    local host_path="~/pg_test_data"
+    local host_path="$home_path/pg_test_data"
 
     # Check if Docker is installed
     if ! command -v docker &> /dev/null; then

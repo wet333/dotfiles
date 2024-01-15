@@ -4,7 +4,7 @@
 sudo echo "Getting sudo permissions..."
 
 # Bash config, create a symlink to the .bashrc file
-sudo ln -s ~/dotfiles/.bashrc ~/.bashrc
+sudo ln -sf ~/dotfiles/.bashrc ~/.bashrc
 
 # Create symlinks for each .service file in the services directory
 for file in ~/dotfiles/services/*.service; do
