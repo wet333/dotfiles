@@ -18,7 +18,7 @@ This repository contains my personal dotfiles for the Bash shell. It includes my
 
 Clone this repository into your home directory:
 ```bash
-    git clone https://github.com/yourusername/dotfiles.git
+    git clone https://github.com/wet333/dotfiles.git
 ```
 Navigate to the repository directory:
 ```bash
