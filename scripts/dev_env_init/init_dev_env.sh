@@ -7,6 +7,9 @@ packages=(
     git
     wget
     nano
+    zip
+    unzip
+    sed
 )
 
 # Disable CD-ROM as a software source (error: tries to install from CD-ROM)

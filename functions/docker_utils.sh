@@ -27,3 +27,22 @@ start_pg_db() {
 
     echo "PostgreSQL database '$db_name' is now running."
 }
+
+start_pgadmin() {
+
+    # Config variables
+    local email="test_user@example.com"
+    local password="password"
+    local container_name="pgadmin"
+    local host_port=5433
+
+    # Run Docker container
+    docker run -d \
+        --name $container_name \
+        -e "PGADMIN_DEFAULT_EMAIL=$email" \
+        -e "PGADMIN_DEFAULT_PASSWORD=$password" \
+        -p $host_port:80 \
+        dpage/pgadmin4:latest
+
+    echo "PgAdmin is now running at localhost:$host_port."
+}
