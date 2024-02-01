@@ -2,7 +2,7 @@
 Description=My Custom Service
 
 [Service]
-ExecStart=/usr/bin/bash /home/wet333/dotfiles/scripts/test-service.sh
+ExecStart=/usr/bin/bash /home/wet333/dotfiles/bin/test-service.sh
 Restart=always
 
 [Install]

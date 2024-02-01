@@ -36,7 +36,13 @@ start_pgadmin() {
     local container_name="pgadmin"
     local host_port=5433
 
-    # Run Docker container
+    # Check if Docker is installed
+    if ! command -v docker &> /dev/null; then
+        echo "Docker is not installed. Please install Docker to use this function."
+        return 1
+    fi
+
+    # Run PgAdmin container
     docker run -d \
         --name $container_name \
         -e "PGADMIN_DEFAULT_EMAIL=$email" \
@@ -45,4 +51,9 @@ start_pgadmin() {
         dpage/pgadmin4:latest
 
     echo "PgAdmin is now running at localhost:$host_port."
+}
+
+# Gets the Gateway ip for connection between host and containers
+function docker_get_ip() {
+    docker network inspect bridge | grep Gateway
 }
