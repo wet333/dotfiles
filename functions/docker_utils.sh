@@ -1,4 +1,6 @@
-start_pg_db() {
+# Docker utilities - Prefix (docker_...)
+
+docker_start_postgres_db() {
     
     # Get current user home path
     home_path=$(readlink -f ~)
@@ -28,7 +30,7 @@ start_pg_db() {
     echo "PostgreSQL database '$db_name' is now running."
 }
 
-start_pgadmin() {
+docker_start_pgadmin() {
 
     # Config variables
     local email="test_user@example.com"
