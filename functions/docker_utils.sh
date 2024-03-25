@@ -57,5 +57,5 @@ docker_start_pgadmin() {
 
 # Gets the Gateway ip for connection between host and containers
 function docker_get_ip() {
-    docker network inspect bridge | grep Gateway
+    docker network inspect bridge | grep Gateway | sed 's/^[ \t]*//;s/[ \t]*$//'
 }
