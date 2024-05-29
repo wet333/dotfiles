@@ -6,8 +6,8 @@
 #              files and adds a script to the user's .bashrc file to source all
 #              .sh files inside a specified folder (`shell`) recursively. The
 #              repository name and GitHub username are variables in the script.
-# Author: Your Name
-# Date: Insert Date
+# Author: Agustin Wet
+# Date:   29/05/2024
 ################################################################################
 
 # Change to the user's home directory
@@ -37,6 +37,19 @@ clone_repo() {
     fi
 }
 
+append_lines_to_bashrc() {
+    local lines=("$@")
+
+    for line in "${lines[@]}"; do
+        if ! grep -Fxq "$line" ~/.bashrc; then
+            echo "$line" >> ~/.bashrc
+            echo "Appended to .bashrc: $line"
+        else
+            echo "Line already exists in .bashrc: $line"
+        fi
+    done
+}
+
 # Append content to .bashrc if not already present
 append_to_bashrc() {
     local FILE_TO_SOURCE="$CLONE_DIR/installation/source_shell_install_script.sh"
@@ -55,13 +68,12 @@ append_to_bashrc() {
     # Build the line
     local bashrc_line="source $FILE_TO_SOURCE && source_all_sh_files $SHELL_DIR"
 
-    # Append the line to .bashrc if it doesn't already exist
-    if ! grep -Fxq "$bashrc_line" ~/.bashrc; then
-        echo "$bashrc_line" >> ~/.bashrc
-        echo "Appended to .bashrc: $bashrc_line"
-    else
-        echo "Line already exists in .bashrc"
-    fi
+    lines_to_append=(
+        "$bashrc_line"
+        "set_prompt"
+    )
+
+    append_lines_to_bashrc "${lines_to_append[@]}"
 }
 
 # Execute the installation procedure
