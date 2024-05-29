@@ -43,7 +43,7 @@ append_to_bashrc() {
     local bashrc="$HOME/.bashrc"
 
     if ! grep -Fq "$content" "$bashrc"; then
-        echo "$content" >> "$bashrc"
+        echo "$content" | tee -a "$bashrc" >/dev/null
         echo "Appended content to $bashrc"
     else
         echo "Content already present in $bashrc"
