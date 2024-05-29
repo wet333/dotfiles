@@ -20,8 +20,8 @@ This repository contains my personal configuration/functionality for Linux envir
 
 To set-up the system configuration you can run any of the following commands:
 ```bash
-    wget -qO- https://raw.githubusercontent.com/wet333/dotfiles/main/install.sh | bash
+    wget -qO- https://raw.githubusercontent.com/wet333/dotfiles/master/install.sh | bash
 ```
 ```bash
-    curl -s https://raw.githubusercontent.com/wet333/dotfiles/main/install.sh | bash
+    curl -s https://raw.githubusercontent.com/wet333/dotfiles/master/install.sh | bash
 ```
