@@ -18,10 +18,15 @@ This repository contains my personal configuration/functionality for Linux envir
 
 ## Installation via script
 
-To set-up the system configuration you can run any of the following commands:
+To download all configurations run one of the following commands:
 ```bash
     wget -qO- https://raw.githubusercontent.com/wet333/dotfiles/master/install.sh | bash
 ```
 ```bash
     curl -s https://raw.githubusercontent.com/wet333/dotfiles/master/install.sh | bash
 ```
+
+By default, the installation script will only activate **shell** related configurations (prompt, aliases, functions, environment variables).
+
+If you want to install other configurations, you can do it running the **\*_init.sh** scripts inside
+the system's folders. Further configurations will and should follow this structure.
