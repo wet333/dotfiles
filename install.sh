@@ -61,7 +61,7 @@ source_all_sh_files() {
         fi
     done
     for subdir in "$dir"/*; do
-        if [ -d "$subdir"]; then
+        if [ -d "$subdir" ]; then
             source_all_sh_files "$subdir"
         fi
     done
