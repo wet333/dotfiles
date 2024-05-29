@@ -1,32 +1,79 @@
-#!/usr/bin/env bash
+#!/bin/bash
 
-# Get sudo permissions for this script
-sudo echo "Getting sudo permissions..."
+################################################################################
+# Script: install.sh
+# Description: This script clones a Git repository containing shell configuration
+#              files and adds a script to the user's .bashrc file to source all
+#              .sh files inside a specified folder (`shell`) recursively. The
+#              repository name and GitHub username are variables in the script.
+# Author: Your Name
+# Date: Insert Date
+################################################################################
 
-# Bash config, create a symlink to the .bashrc file
-sudo ln -sf ~/dotfiles/.bashrc ~/.bashrc
+# Change to the user's home directory
+cd "$HOME"
 
-# Create symlinks for each .service file in the services directory
-for file in ~/dotfiles/services/*.service; do
+# Variables
+GITHUB_USERNAME="wet333"
+REPO_NAME="dotfiles"
+REPO_URL="https://github.com/$GITHUB_USERNAME/$REPO_NAME.git"
+CLONE_DIR="$HOME/$REPO_NAME"
+SHELL_DIR="$CLONE_DIR/shell"
 
-    absolute_path=$(realpath ~/dotfiles/scripts/test-service.sh)
+# Main installation procedure function
+installation_procedure() {
+    clone_repo
+    append_to_bashrc
+    source "$HOME/.bashrc" # Source the .bashrc file to apply changes immediately
+    echo "Installation complete."
+}
 
-    # Edit the .service file to replace the ExecStart path with the absolute path of current service script
-    sed -i "s;ExecStart=.*;ExecStart=/usr/bin/bash $absolute_path;" "$file"
-
-    # Get the filename without the path
-    filename=$(basename "$file")
-
-    # if the symlink already exists, delete it and create a new one and restart the service, else just create the symlink and start the service
-    if [ -f "/etc/systemd/system/$filename" ]; then
-        sudo rm "/etc/systemd/system/$filename"
-        sudo ln -s "$file" "/etc/systemd/system/$filename"
-        sudo systemctl daemon-reload
-        sudo systemctl restart "$filename"
-    else
-        sudo ln -s "$file" "/etc/systemd/system/$filename"
-        sudo systemctl daemon-reload
-        sudo systemctl start "$filename"
+# Clone the Git repository and check if the clone was successful
+clone_repo() {
+    git clone "$REPO_URL" "$CLONE_DIR"
+    if [ $? -ne 0 ]; then
+        echo "Failed to clone the repository."
+        exit 1
     fi
+}
 
-done
+# Append content to .bashrc if not already present
+append_to_bashrc() {
+    local content="$BASHRC_LOADER"
+    local bashrc="$HOME/.bashrc"
+
+    if ! grep -Fq "$content" "$bashrc"; then
+        echo "$content" >> "$bashrc"
+        echo "Appended content to $bashrc"
+    else
+        echo "Content already present in $bashrc"
+    fi
+}
+
+# Define the function to source .sh files recursively
+BASHRC_LOADER=$(cat <<'EOF'
+# Source all .sh files in the shell folder recursively
+source_all_sh_files() {
+    local dir="$1"
+    for file in "$dir"/*.sh; do
+        if [ -f "$file" ]; then
+            . "$file"
+        fi
+    done
+    for subdir in "$dir"/*; do
+        if [ -d "$subdir"]; then
+            source_all_sh_files "$subdir"
+        fi
+    done
+}
+
+# Call the function with the specific directory
+source_all_sh_files "$SHELL_DIR"
+EOF
+)
+
+# Replace placeholder with actual repository name
+BASHRC_LOADER="${BASHRC_LOADER//REPO_NAME/$REPO_NAME}"
+
+# Execute the installation procedure
+installation_procedure
