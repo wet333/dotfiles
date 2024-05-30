@@ -1,26 +1,13 @@
-function vsdocs() {
-    directory="$HOME/Documents"
+# Shortcuts - Prefix (goto_...)
 
-    # Check if code command is available
-    if ! command -v code &> /dev/null; then
-        echo "Visual Studio Code is not installed or not in PATH."
-        return 1
-    fi
-
-    # Open ~/Documents directory with Visual Studio Code
-    code "$directory"
+goto_books() {
+  cd "/media/awet333/MYSHIT/Libros" || exit
 }
 
-function vsdot() {
+goto_home() {
+  cd ~ || exit
+}
 
-    directory="$HOME/dotfiles"
-
-    # Check if code command is available
-    if ! command -v code &> /dev/null; then
-        echo "Visual Studio Code is not installed or not in PATH."
-        return 1
-    fi
-
-    # Open ~/dotfiles directory with Visual Studio Code
-    code "$directory"
+goto_downloads() {
+  cd "$HOME/Downloads" || exit
 }

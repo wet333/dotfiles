@@ -1,6 +1,6 @@
-alias ll="ls -al"
+alias ls='ls --color=always -lh '
+
 alias cd="my_cd"
 alias ..="cd .."
 
-alias ls="ls --color=always"
 alias clear="clear -x"

@@ -1,5 +1,6 @@
 # Networking utility functions - Prefix (net_...)
 
+# Determines if an IP is private or public, it takes an IP as an argument
 net_ip_type() {
     IP=$1
     if [[ $IP =~ ^10\. ]] || [[ $IP =~ ^172\.(1[6-9]|2[0-9]|3[0-1])\. ]] || [[ $IP =~ ^192\.168\. ]]; then
