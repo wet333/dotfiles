@@ -5,9 +5,17 @@ goto_books() {
 }
 
 goto_home() {
-  cd ~ || exit
+  cd "$HOME" || exit
+}
+
+goto_fs() {
+  cd "$HOME/Files" || exit
 }
 
 goto_downloads() {
   cd "$HOME/Downloads" || exit
+}
+
+goto_programming() {
+    cd "$HOME/Programming" || exit
 }
