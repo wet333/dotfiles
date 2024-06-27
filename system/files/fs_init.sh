@@ -5,7 +5,7 @@
 
 # Directory Lists
 main_folder="Files"
-folders_to_create=("Downloads" "Music" "Pictures" "Videos" "Programming" "Documents")
+folders_to_create=("Downloads" "Music" "Pictures" "Videos" "Programming" "Documents" "3DPrinting" "Electronics")
 folders_to_delete=("Downloads" "Music" "Pictures" "Videos" "Documents" "Templates" "Public")
 
 # Init Configuration
