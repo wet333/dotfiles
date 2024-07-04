@@ -39,7 +39,7 @@ textm_char_to_upper_by_index(){
 }
 
 # A function that returns the index number of the first alphanumeric character in a string (including spaces)
-_get_first_alphanumeric_index() {
+__get_first_alphanumeric_index() {
      local input="$1"
      local length=${#input}
 
