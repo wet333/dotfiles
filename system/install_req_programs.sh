@@ -10,6 +10,8 @@ required_programs=(
     sshpass
     neofetch
     mlocate
+    zip
+    unzip
 )
 
 echo "Updating package list..."
