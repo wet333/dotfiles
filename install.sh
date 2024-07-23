@@ -24,6 +24,7 @@ SHELL_DIR="$CLONE_DIR/shell"
 installation_procedure() {
     clone_repo
     append_to_bashrc
+    add_bin_folder_to_path "$CLONE_DIR/bin"
     source "$HOME/.bashrc" # Source the .bashrc file to apply changes immediately
     echo "Installation complete."
 }
@@ -74,6 +75,35 @@ append_to_bashrc() {
     )
 
     append_lines_to_bashrc "${lines_to_append[@]}"
+}
+
+add_bin_folder_to_path() {
+    if [ $# -eq 0 ]; then
+        echo "Usage: add_to_path <directory>"
+        return 1
+    fi
+
+    directory="$1"
+
+    # Check if directory exists
+    if [ ! -d "$directory" ]; then
+        echo "Error: Directory '$directory' does not exist."
+        return 1
+    fi
+
+    # Check if directory is already in PATH
+    if [[ ":$PATH:" == *":$directory:"* ]]; then
+        echo "'$directory' is already in PATH."
+        return 0
+    fi
+
+    # Add directory to PATH in .bashrc
+    echo "export PATH=\$PATH:$directory" >> ~/.bashrc
+
+    # Reload .bashrc
+    source ~/.bashrc
+
+    echo "Added '$directory' to PATH. Changes will take effect in new terminal sessions."
 }
 
 # Execute the installation procedure
