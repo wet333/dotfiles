@@ -100,9 +100,16 @@ cd ..
 # Create Docker related files
 # Backend Dockerfile
 cat << EOF > backend/Dockerfile
+# Build step
+FROM maven AS build
+WORKDIR /app
+COPY ./spring-api /app
+RUN mvn clean package
+
+# Start step
 FROM openjdk:$JAVA_VERSION-jdk-slim
 WORKDIR /app
-COPY ./spring-api/target/*.jar app.jar
+COPY --from=build /app/target/*.jar app.jar
 ENTRYPOINT ["java", "-jar", "app.jar"]
 EOF
 
