@@ -1,15 +1,4 @@
-# Docker utilities - Prefix (docker_...)
-
-# Gets the Gateway ip for connection between host and containers
-docker_get_ip() {
-    docker network inspect bridge | grep Gateway | sed 's/^[ \t]*//;s/[ \t]*$//'
-}
-
-docker_config_no_sudo() {
-    sudo groupadd docker
-    sudo usermod -aG docker $USER
-    sudo systemctl restart docker
-}
+# Postgres container management -(part of)-> Docker utilities - Prefix (docker_...)
 
 # PostgreSQL Docker Management Functions
 # ======================================
@@ -156,7 +145,7 @@ docker_pg_down() {
     # Check if the container is running
     if docker ps --format '{{.Names}}' | grep -q "^${container_name}$"; then
         echo "Stopping PostgreSQL container..."
-        docker stop $container_name
+        docker stop "$container_name"
         echo "PostgreSQL container stopped."
     else
         echo "PostgreSQL container is not running."
@@ -165,36 +154,9 @@ docker_pg_down() {
     # Check if the container exists (it might be stopped)
     if docker ps -a --format '{{.Names}}' | grep -q "^${container_name}$"; then
         echo "Removing PostgreSQL container..."
-        docker rm $container_name
+        docker rm "$container_name"
         echo "PostgreSQL container removed."
     else
         echo "PostgreSQL container does not exist."
-    fi
-}
-
-# TODO: this should be in a separate file related to PostgreSQL management
-# like postgres_utils.sh or something similar.
-docker_pg_new_db() {
-    if [ $# -ne 1 ]; then
-        echo "Usage: docker_pg_new_db <db_name>"
-        return 1
-    fi
-
-    local container_name="$PG_CONTAINER"
-    db_name="$1"
-    username="$PG_USERNAME"
-
-    # Check if the container is running
-    if ! docker ps | grep -q "$container_name"; then
-        echo "Error: postgres_db container is not running"
-        return 1
-    fi
-
-    # Create the database
-    if docker exec postgres_db psql -U "$username" -c "CREATE DATABASE $db_name;"; then
-        echo "Database '$db_name' created successfully"
-    else
-        echo "Error: Failed to create database '$db_name'"
-        return 1
     fi
 }
