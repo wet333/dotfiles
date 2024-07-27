@@ -88,28 +88,16 @@ cd frontend
 npx create-react-app "$FRONTEND_APP_NAME"
 cd ..
 
-# Set up PostgreSQL
-cd database
-cat << EOF > init.sql
-CREATE DATABASE $DB_NAME;
-CREATE USER $DB_USER WITH ENCRYPTED PASSWORD '$DB_PASSWORD';
-GRANT ALL PRIVILEGES ON DATABASE $DB_NAME TO $DB_USER;
-EOF
-cd ..
-
 # Create Docker related files
 # Backend Dockerfile
 cat << EOF > backend/Dockerfile
-# Build step
-FROM maven AS build
-WORKDIR /app
-COPY ./spring-api /app
-RUN mvn clean package
+# Description: Dockerfile for the backend service
+# Developer build
 
-# Start step
-FROM openjdk:$JAVA_VERSION-jdk-slim
+FROM openjdk:21
 WORKDIR /app
-COPY --from=build /app/target/*.jar app.jar
+COPY ./spring-api/target/*.jar ./app.jar
+EXPOSE 8080
 ENTRYPOINT ["java", "-jar", "app.jar"]
 EOF
 
@@ -137,74 +125,27 @@ EOF
 
 # Create docker compose file for Development, docker-compose.yml
 cat << EOF > docker-compose.yml
-version: '3.8'
 services:
   backend:
     build: ./backend
     ports:
       - "$BACKEND_PORT:$BACKEND_PORT"
     environment:
-      - SPRING_DATASOURCE_URL=jdbc:postgresql://db:$DB_PORT/$DB_NAME
-      - SPRING_DATASOURCE_USERNAME=$DB_USER
-      - SPRING_DATASOURCE_PASSWORD=$DB_PASSWORD
-    depends_on:
-      - db
+      - JDBC_URL=jdbc:postgresql://host.docker.internal:5432/${DB_NAME}
+    network_mode: "bridge"
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+
   frontend:
-    build: ./frontend
+    build:
+        context: ./frontend
+        target: development
     ports:
       - "$FRONTEND_PORT:$FRONTEND_PORT"
     volumes:
       - ./frontend/$FRONTEND_APP_NAME:/app
       - /app/node_modules
     command: npm start
-  db:
-    image: postgres:$POSTGRES_VERSION
-    ports:
-      - "$DB_PORT:$DB_PORT"
-    environment:
-      - POSTGRES_DB=$DB_NAME
-      - POSTGRES_USER=$DB_USER
-      - POSTGRES_PASSWORD=$DB_PASSWORD
-    volumes:
-      - ./database/init.sql:/docker-entrypoint-initdb.d/init.sql
-      - pgdata:/var/lib/postgresql/data
-
-volumes:
-  pgdata:
-EOF
-
-# Create docker compose file for Production, docker-compose.prod.yml
-cat << EOF > docker-compose.prod.yml
-version: '3.8'
-services:
-  backend:
-    build: ./backend
-    ports:
-      - "$BACKEND_PORT:$BACKEND_PORT"
-    environment:
-      - SPRING_DATASOURCE_URL=jdbc:postgresql://db:$DB_PORT/$DB_NAME
-      - SPRING_DATASOURCE_USERNAME=$DB_USER
-      - SPRING_DATASOURCE_PASSWORD=$DB_PASSWORD
-    depends_on:
-      - db
-  frontend:
-    build: ./frontend
-    ports:
-      - "80:80"
-  db:
-    image: postgres:$POSTGRES_VERSION
-    ports:
-      - "$DB_PORT:$DB_PORT"
-    environment:
-      - POSTGRES_DB=$DB_NAME
-      - POSTGRES_USER=$DB_USER
-      - POSTGRES_PASSWORD=$DB_PASSWORD
-    volumes:
-      - ./database/init.sql:/docker-entrypoint-initdb.d/init.sql
-      - pgdata:/var/lib/postgresql/data
-
-volumes:
-  pgdata:
 EOF
 
 # Create .gitignore
@@ -253,7 +194,7 @@ fi
 # Use cat to overwrite the application.properties file with new content
 cat << EOF > "$PROPERTIES_FILE"
 # Postgres Database
-spring.datasource.url=jdbc:postgresql://localhost:${DB_PORT}/${DB_NAME}
+spring.datasource.url=${JDBC_URL:jdbc:postgresql://localhost:${DB_PORT}/${DB_NAME}}
 spring.datasource.username=${DB_USER}
 spring.datasource.password=${DB_PASSWORD}
 spring.datasource.driver-class-name=org.postgresql.Driver
