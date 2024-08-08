@@ -1,4 +1,4 @@
-alias ls='ls --color=always -lh '
+alias ls='ls --color=always -lhr '
 alias ..="cd .."
 alias clear="clear -x"
 
