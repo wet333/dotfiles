@@ -1,4 +1,4 @@
-source_all_sh_files() {
+recursive_sourcing() {
     local dir="$1"
     for file in "$dir"/*.sh; do
         if [ -f "$file" ]; then

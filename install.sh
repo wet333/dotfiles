@@ -22,19 +22,40 @@ SHELL_DIR="$CLONE_DIR/shell"
 
 # Main installation procedure function
 installation_procedure() {
+    # Initial setup
+    update_and_upgrade
     clone_repo
+
+    # System configuration
     append_to_bashrc
     add_bin_folder_to_path "$CLONE_DIR/bin"
-    source "$HOME/.bashrc" # Source the .bashrc file to apply changes immediately
+
+    bash "$CLONE_DIR/installation/setup_ssh.sh"
+    bash "$CLONE_DIR/installation/setup_filesystem_configuration.sh"
+
+    # Source the .bashrc file to apply changes immediately
+    source "$HOME/.bashrc"
     echo "Installation complete."
+}
+
+update_and_upgrade() {
+    sudo apt update
+    sudo apt upgrade -y
 }
 
 # Clone the Git repository and check if the clone was successful
 clone_repo() {
-    git clone "$REPO_URL" "$CLONE_DIR"
-    if [ $? -ne 0 ]; then
-        echo "Failed to clone the repository."
-        exit 1
+    if [ -d "$CLONE_DIR" ]; then
+        echo "Repository is already cloned."
+    else
+        echo "Cloning repository..."
+        git clone "$REPO_URL" "$CLONE_DIR"
+        if [ $? -ne 0 ]; then
+            echo "Error: Failed to clone repository. Aborting installation."
+            exit 1
+        else
+            echo "Repository cloned successfully."
+        fi
     fi
 }
 
@@ -51,9 +72,9 @@ append_lines_to_bashrc() {
     done
 }
 
-# Append content to .bashrc if not already present
+# Append a couple of lines into .bashrc, in order to load all configurations on each terminal session
 append_to_bashrc() {
-    local FILE_TO_SOURCE="$CLONE_DIR/installation/source_shell_install_script.sh"
+    local FILE_TO_SOURCE="$CLONE_DIR/installation/recursive_sourcing.sh"
 
     # Ensure the file and folder exists
     if [ ! -f "$FILE_TO_SOURCE" ]; then
@@ -66,12 +87,12 @@ append_to_bashrc() {
         return 1
     fi
 
-    # Build the line
+    # Build the line that sources all .sh files in the /shell folder and subfolders
     local bashrc_line="source $FILE_TO_SOURCE && source_all_sh_files $SHELL_DIR"
 
     lines_to_append=(
         "$bashrc_line"
-        "set_prompt"
+        "set_prompt"   # Prompt configuration function
     )
 
     append_lines_to_bashrc "${lines_to_append[@]}"
