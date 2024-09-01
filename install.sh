@@ -88,7 +88,7 @@ append_to_bashrc() {
     fi
 
     # Build the line that sources all .sh files in the /shell folder and subfolders
-    local bashrc_line="source $FILE_TO_SOURCE && source_all_sh_files $SHELL_DIR"
+    local bashrc_line="source $FILE_TO_SOURCE && recursive_sourcing $SHELL_DIR"
 
     lines_to_append=(
         "$bashrc_line"

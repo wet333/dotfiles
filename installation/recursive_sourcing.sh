@@ -7,7 +7,7 @@ recursive_sourcing() {
     done
     for subdir in "$dir"/*; do
         if [ -d "$subdir" ]; then
-            source_all_sh_files "$subdir"
+            recursive_sourcing "$subdir"
         fi
     done
 }
