@@ -32,6 +32,7 @@ installation_procedure() {
 
     echo "Please stay at the desk, you will need to enter some input!!!"
 
+    # System setup scripts
     bash "$CLONE_DIR/installation/setup_basic_software.sh"
     bash "$CLONE_DIR/installation/setup_sdkman.sh"
     bash "$CLONE_DIR/installation/setup_ssh.sh"
