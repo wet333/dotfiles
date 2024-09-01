@@ -30,6 +30,10 @@ installation_procedure() {
     append_to_bashrc
     add_bin_folder_to_path "$CLONE_DIR/bin"
 
+    echo "Please stay at the desk, you will need to enter some input!!!"
+
+    bash "$CLONE_DIR/installation/setup_basic_software.sh"
+    bash "$CLONE_DIR/installation/setup_sdkman.sh"
     bash "$CLONE_DIR/installation/setup_ssh.sh"
     bash "$CLONE_DIR/installation/setup_filesystem_configuration.sh"
 
