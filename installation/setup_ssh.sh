@@ -9,8 +9,15 @@ sudo apt install -y openssh-server
 sudo systemctl start ssh
 sudo systemctl enable ssh
 
-# Generate SSH key pair
-ssh-keygen -t rsa -b 4096 -f ~/.ssh/id_rsa -N ""
+# Check if SSH key already exists
+if [ -f ~/.ssh/id_rsa ]; then
+    echo "SSH key already exists. Skipping key generation."
+else
+    # Generate SSH key pair
+    echo "Generating new SSH key..."
+    ssh-keygen -t rsa -b 4096 -f ~/.ssh/id_rsa -N ""
+    echo "SSH key generated."
+fi
 
 # Display the public key
 echo "Here's your public SSH key:"

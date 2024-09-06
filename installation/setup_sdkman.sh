@@ -1,21 +1,40 @@
 #!/bin/bash
 
-curl -s "https://get.sdkman.io" | bash
+# Checks if specific sdk is already installed, install it if not
+install_or_skip() {
+    sdk_name=$1
 
-source "$HOME/.sdkman/bin/sdkman-init.sh"
+    if sdk list "$sdk_name" | grep -q "installed"; then
+        echo "$sdk_name is already installed, skipping..."
+    else
+        echo "Installing $sdk_name"
+        sdk install "$sdk_name"
+    fi
+}
+
+# Check if sdkman is previously installed
+if [ -d "$HOME/.sdkman" ]; then
+    echo "SDKMAN is already installed. Skipping SDKMAN installation."
+    source "$HOME/.sdkman/bin/sdkman-init.sh"
+else
+    echo "Installing SDKMAN..."
+    curl -s "https://get.sdkman.io" | bash
+    source "$HOME/.sdkman/bin/sdkman-init.sh"
+fi
 
 sdk version
 
-sdk install java
+install_or_skip java
 
-# sdk install java 22.0.2-tem
-# sdk install java 21.0.4-tem
-# sdk install java 17.0.12-tem
-# sdk install java 11.0.24-tem
-# sdk install java 8.0.422-tem
-# sdk default java 21.0.4-tem
+# Optional specific java versions
+# install_or_skip java 22.0.2-tem
+# install_or_skip java 21.0.4-tem
+# install_or_skip java 17.0.12-tem
+# install_or_skip java 11.0.24-tem
+# install_or_skip java 8.0.422-tem
+# install_or_skip java 21.0.4-tem
 
-sdk install maven
-sdk install gradle
-sdk install micronaut
-sdk install springboot
+install_or_skip maven
+install_or_skip gradle
+install_or_skip micronaut
+install_or_skip springboot

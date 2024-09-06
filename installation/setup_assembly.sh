@@ -1,9 +1,9 @@
 #!/bin/bash
 
 echo "Installing assembly development required software..."
-sudo apt install nasm
-sudo apt install binutils
-sudo apt install gdb
-sudo apt install qemu
-sudo apt install build-essential
+sudo apt install -y build-essential
+sudo apt install -y gdb
+sudo apt install -y nasm
+sudo apt install -y binutils
+sudo apt install -y qemu-system qemu-user-static
 echo "Assembly is ready!"
