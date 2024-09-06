@@ -33,10 +33,11 @@ installation_procedure() {
     echo "Please stay at the desk, you will need to enter some input!!!"
 
     # System setup scripts
+    bash "$CLONE_DIR/installation/setup_filesystem_configuration.sh"
     bash "$CLONE_DIR/installation/setup_basic_software.sh"
+    bash "$CLONE_DIR/installation/setup_assembly.sh"
     bash "$CLONE_DIR/installation/setup_sdkman.sh"
     bash "$CLONE_DIR/installation/setup_ssh.sh"
-    bash "$CLONE_DIR/installation/setup_filesystem_configuration.sh"
 
     # Source the .bashrc file to apply changes immediately
     source "$HOME/.bashrc"
