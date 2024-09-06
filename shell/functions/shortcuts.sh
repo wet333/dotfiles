@@ -8,7 +8,7 @@ goto_home() {
   cd "$HOME" || exit
 }
 
-goto_fs() {
+goto_files() {
   cd "$HOME/Files" || exit
 }
 
