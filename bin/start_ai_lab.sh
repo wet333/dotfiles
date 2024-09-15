@@ -11,24 +11,6 @@
 #      * ALLOW_RESET=true
 #      * ANONYMIZED_TELEMETRY=false
 #
-# 2. OpenWebUI (open_webui):
-#    - Port: 3006 (mapped to container port 8080)
-#    - Purpose: Web interface for interacting with language models
-#    - Environment variables:
-#      * OLLAMA_API_BASE_URL=http://host.docker.internal:3008
-#      * OPENWEBUI_BASE_URL=http://localhost:3006
-#
-# 3. AnythingLLM (anything_llm):
-#    - Port: 3007 (mapped to container port 3001)
-#    - Purpose: Framework for building applications with language models
-#    - Volume: anythingllm-data (persists storage)
-#    - Environment variables:
-#      * CHROMA_URL=http://host.docker.internal:3005
-#      * OPENAI_API_KEY=your_openai_api_key_here (IMPORTANT: Replace with your actual API key)
-#      * STORAGE_DIR=/app/server/storage
-#      * UID=1000
-#      * GID=1000
-#
 # 4. Ollama (ollama):
 #    - Port: 3008 (mapped to container port 11434)
 #    - Purpose: Runs large language models locally
@@ -46,10 +28,6 @@
 # Set variables for container names and images
 CHROMA_CONTAINER="chroma_db"
 CHROMA_IMAGE="ghcr.io/chroma-core/chroma:latest"
-OPENWEBUI_CONTAINER="open_webui"
-OPENWEBUI_IMAGE="ghcr.io/open-webui/open-webui:main"
-ANYTHINGLLM_CONTAINER="anything_llm"
-ANYTHINGLLM_IMAGE="mintplexlabs/anythingllm:latest"
 OLLAMA_CONTAINER="ollama"
 OLLAMA_IMAGE="ollama/ollama:latest"
 
@@ -73,13 +51,7 @@ start_container() {
 }
 
 # Start ChromaDB
-start_container $CHROMA_CONTAINER $CHROMA_IMAGE "-p 3005:8000" "-e ALLOW_RESET=true -e ANONYMIZED_TELEMETRY=false -v chroma-data:/chroma/chroma"
-
-# Start OpenWebUI
-start_container $OPENWEBUI_CONTAINER $OPENWEBUI_IMAGE "-p 3006:8080" "-e OLLAMA_API_BASE_URL=http://host.docker.internal:3008 -e OPENWEBUI_BASE_URL=http://localhost:3006"
-
-# Start AnythingLLM
-start_container $ANYTHINGLLM_CONTAINER $ANYTHINGLLM_IMAGE "-p 3007:3001" "-e CHROMA_URL=http://host.docker.internal:3005 -e OPENAI_API_KEY=your_openai_api_key_here -e STORAGE_DIR=/app/server/storage -e UID=1000 -e GID=1000 -v anythingllm-data:/app/server/storage"
+start_container $CHROMA_CONTAINER $CHROMA_IMAGE "-p 3009:8000" "-e ALLOW_RESET=true -e ANONYMIZED_TELEMETRY=false -v chroma-data:/chroma/chroma"
 
 # Start Ollama
 start_container $OLLAMA_CONTAINER $OLLAMA_IMAGE "-p 3008:11434" "--gpus all -v ollama:/root/.ollama"
