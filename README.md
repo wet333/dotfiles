@@ -1,32 +1,36 @@
-# dotfiles
+# .dotfiles
 
 This repository contains my personal configuration/functionality for Linux environments.
 
-### Directory Structure:
+## Directory Structure
 
-* **/shell:** Shell customization files, such as custom prompts, aliases, and environment variables.
+* `bin/`: Contains executable scripts or binaries intended to be added to your system's `PATH` for global access.
+* `shell/`: Bash terminal configuration files (aliases, environment variables and prompt settings).
+* `shell/functions/`: A collection of reusable Bash functions sourced by the shell configuration to streamline and personalize common command-line tasks.
+* `scripts/`: Standalone utility scripts used for various automation, setup, or maintenance tasks (typically run manually or less frequently than items in `bin/`).
+* `installation/`: Scripts specifically designed to run **_only_** during the initial setup/installation process of these dotfiles.
+* `services/`: **(...Work in Progress)** Systemd services for managing background processes.
+* `install.sh`: The main installation script responsible for setting up the dotfiles in your home directory.
 
-* **/shell/functions:** Bash functions that I use to streamline common tasks and operations in my shell environment.
+## Installation
 
-* **/scripts:** A collection of Bash scripts that serve various purposes. These scripts can include installation scripts for software packages, system utilities, and other helpful tools.
+This installation script is primarily intended for a fresh Linux system, but can also be run to update an existing installation of these dotfiles.
 
-* **/system:** Scripts that sets-up the environment, and the way that linux works for me.
+**⚠️ Warning:** The installation script (`install.sh`) will likely modify files in your home directory (e.g., `~/.bashrc`, `~/.profile`). It might create symbolic links or copy files, potentially overwriting existing configurations. Furthermore, the script may delete specific files or directories if they conflict with the new setup.
 
-* **/system/files:** Scripts for handling and configuring the way I store my data.
+**👉 It is strongly recommended to:**
 
-* **install.sh**: Simple installer that appends a bash snippet to ~/.bashrc, By doing so, your shell configuration files are applied to every new session.
+1. **Review** the `install.sh` script to understand what it does.
+2. Run one of this commands:
 
-## Installation via script
-
-To download all configurations run one of the following commands:
 ```bash
+    sudo apt update && \
+    sudo apt install -y wget git && \
     wget -qO- https://raw.githubusercontent.com/wet333/dotfiles/master/install.sh | bash
 ```
+
 ```bash
-    curl -s https://raw.githubusercontent.com/wet333/dotfiles/master/install.sh | bash
+    sudo apt update && \
+    sudo apt install -y curl git && \
+    curl -sL https://raw.githubusercontent.com/wet333/dotfiles/master/install.sh | bash
 ```
-
-By default, the installation script will only activate **shell** related configurations (prompt, aliases, functions, environment variables).
-
-If you want to install other configurations, you can do it running the **\*_init.sh** scripts inside
-the system's folders. Further configurations will and should follow this structure.

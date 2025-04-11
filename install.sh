@@ -50,8 +50,16 @@ update_and_upgrade() {
     sudo apt upgrade -y
 }
 
-# Clone the Git repository and check if the clone was successful
 clone_repo() {
+
+    # Check if git is installed
+    if ! command -v git &> /dev/null; then
+        echo "Error: 'git' command not found." >&2
+        echo "Please install git using your system's package manager (e.g., 'sudo apt install git', 'sudo yum install git', 'sudo pacman -S git') and try again." >&2
+        exit 1
+    fi
+
+    # Clone the Git repository and check if the clone was successful
     if [ -d "$CLONE_DIR" ]; then
         echo "Repository is already cloned."
     else
