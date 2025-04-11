@@ -35,7 +35,7 @@ installation_procedure() {
 
     # System setup scripts
     bash "$CLONE_DIR/installation/setup_custom_filesystem.sh"
-    bash "$CLONE_DIR/installation/setup_install_basic.sh"
+    bash "$CLONE_DIR/installation/setup_install_basics.sh"
     bash "$CLONE_DIR/installation/setup_install_asm.sh"
     bash "$CLONE_DIR/installation/setup_install_java.sh"
     bash "$CLONE_DIR/installation/setup_ssh.sh"
