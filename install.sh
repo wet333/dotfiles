@@ -38,6 +38,7 @@ installation_procedure() {
     bash "$CLONE_DIR/installation/setup_install_basics.sh"
     bash "$CLONE_DIR/installation/setup_install_asm.sh"
     bash "$CLONE_DIR/installation/setup_install_java.sh"
+    bash "$CLONE_DIR/installation/setup_install_node.sh"
     bash "$CLONE_DIR/installation/setup_ssh.sh"
 
     # Source the .bashrc file to apply changes immediately
@@ -46,7 +47,7 @@ installation_procedure() {
 }
 
 update_and_upgrade() {
-    sudo apt update
+    sudo apt update -y
     sudo apt upgrade -y
 }
 
