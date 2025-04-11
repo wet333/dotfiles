@@ -1,13 +1,14 @@
 #!/bin/bash
 
 ################################################################################
-# Script: installation.sh
 # Description: This script clones a Git repository containing shell configuration
 #              files and adds a script to the user's .bashrc file to source all
 #              .sh files inside a specified folder (`shell`) recursively. The
 #              repository name and GitHub username are variables in the script.
-# Author: Agustin Wet
-# Date:   29/05/2024
+#
+# Author        :   Agustin Wet
+# Creation date :   29/05/2024
+# Last Update   :   11/04/2025
 ################################################################################
 
 # Change to the user's home directory
@@ -33,10 +34,10 @@ installation_procedure() {
     echo "Please stay at the desk, you will need to enter some input!!!"
 
     # System setup scripts
-    bash "$CLONE_DIR/installation/setup_filesystem_configuration.sh"
-    bash "$CLONE_DIR/installation/setup_basic_software.sh"
-    bash "$CLONE_DIR/installation/setup_assembly.sh"
-    bash "$CLONE_DIR/installation/setup_sdkman.sh"
+    bash "$CLONE_DIR/installation/setup_custom_filesystem.sh"
+    bash "$CLONE_DIR/installation/setup_install_basic.sh"
+    bash "$CLONE_DIR/installation/setup_install_asm.sh"
+    bash "$CLONE_DIR/installation/setup_install_java.sh"
     bash "$CLONE_DIR/installation/setup_ssh.sh"
 
     # Source the .bashrc file to apply changes immediately
@@ -105,33 +106,44 @@ append_to_bashrc() {
 }
 
 add_bin_folder_to_path() {
+    # Verify that a directory argument is provided.
     if [ $# -eq 0 ]; then
-        echo "Usage: add_to_path <directory>"
+        echo "Usage: add_bin_folder_to_path <directory>"
         return 1
     fi
 
-    directory="$1"
+    # Use a local variable to hold the directory path.
+    local directory="$1"
 
-    # Check if directory exists
+    # If the directory does not exist, try to create it.
     if [ ! -d "$directory" ]; then
-        echo "Error: Directory '$directory' does not exist."
-        return 1
+        echo "Directory '$directory' does not exist. Creating it..."
+        mkdir -p "$directory"
+        # Check that mkdir succeeded.
+        if [ $? -ne 0 ]; then
+            echo "Failed to create '$directory'. Please check your permissions."
+            return 1
+        fi
     fi
 
-    # Check if directory is already in PATH
+    # Check if the directory is already in the PATH.
     if [[ ":$PATH:" == *":$directory:"* ]]; then
         echo "'$directory' is already in PATH."
         return 0
     fi
 
-    # Add directory to PATH in .bashrc
-    echo "export PATH=\$PATH:$directory" >> ~/.bashrc
+    # Append the export command to ~/.bashrc
+    {
+        echo ""
+        echo "export PATH=\$PATH:$directory"
+    } >> ~/.bashrc
 
-    # Reload .bashrc
-    source ~/.bashrc
+    # Optionally, update the current shell's PATH.
+    export PATH="$PATH:$directory"
 
-    echo "Added '$directory' to PATH. Changes will take effect in new terminal sessions."
+    echo "Added '$directory' to PATH. The change has been applied to the current session and will persist in new terminals."
 }
+
 
 # Execute the installation procedure
 installation_procedure

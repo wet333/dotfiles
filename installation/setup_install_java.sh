@@ -1,5 +1,7 @@
 #!/bin/bash
 
+echo "Setting up Java development software and tools..."
+
 # Checks if specific sdk is already installed, install it if not
 install_or_skip() {
     sdk_name=$1
@@ -38,3 +40,5 @@ install_or_skip maven
 install_or_skip gradle
 install_or_skip micronaut
 install_or_skip springboot
+
+echo "Java is ready to code!"
