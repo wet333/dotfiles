@@ -115,9 +115,7 @@ home_dir="$HOME"
 
 # List of directories to delete
 declare -a dirs_to_delete=(
-    "Programming"
-    "Images"
-    "3DPrints"
+    "None"
 )
 
 # List of directories to create
