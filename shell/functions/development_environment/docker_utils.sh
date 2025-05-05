@@ -13,3 +13,33 @@ docker_rmi_dangling() {
         echo "No dangling images to remove"
     fi
 }
+
+# Restarts docker service
+docker_restart() {
+    echo "Stopping Docker service..."
+    if command -v systemctl &> /dev/null; then
+        sudo systemctl stop docker
+        echo "Waiting for Docker to completely stop..."
+        sleep 3
+        echo "Starting Docker service..."
+        sudo systemctl start docker
+    elif command -v service &> /dev/null; then
+        sudo service docker stop
+        echo "Waiting for Docker to completely stop..."
+        sleep 3
+        echo "Starting Docker service..."
+        sudo service docker start
+    else
+        echo "Error: Could not find systemctl or service commands. Please restart Docker manually."
+        return 1
+    fi
+    
+    echo "Checking Docker service status..."
+    if docker info &> /dev/null; then
+        echo "Docker restarted successfully!"
+        return 0
+    else
+        echo "Docker restart failed. Please check logs with 'sudo journalctl -u docker.service' or restart manually."
+        return 1
+    fi
+}

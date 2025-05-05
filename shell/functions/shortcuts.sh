@@ -1,15 +1,7 @@
 # Shortcuts - Prefix (goto_...)
 
-goto_books() {
-  cd "/media/awet333/MYSHIT/Libros" || exit
-}
-
 goto_home() {
   cd "$HOME" || exit
-}
-
-goto_files() {
-  cd "$HOME/Files" || exit
 }
 
 goto_downloads() {
@@ -18,4 +10,9 @@ goto_downloads() {
 
 goto_programming() {
     cd "$HOME/Programming" || exit
+}
+
+dots() {
+    cd "$HOME/dotfiles" || exit
+    code .
 }
